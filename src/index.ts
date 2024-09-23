@@ -1,2 +1,3 @@
-const world: string = "world";
-console.log(`Hello, ${world}!`);
+import { run } from "./example";
+
+run();

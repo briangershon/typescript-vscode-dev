@@ -1,6 +1,6 @@
 # typescript-vscode-dev
 
-Use a VSCode dev container as your virtual TypeScript development environment.
+Use a VSCode dev container as your virtual TypeScript development environment for Node apps.
 
 ## Getting Started
 

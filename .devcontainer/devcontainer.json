@@ -4,4 +4,12 @@
     "dockerfile": "../Dockerfile"
   },
   "runArgs": ["--env-file", "${localWorkspaceFolder}/.env"],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
 }
