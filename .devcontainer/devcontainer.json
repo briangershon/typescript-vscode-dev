@@ -1,0 +1,7 @@
+{
+  "name": "TypeScript Node.js",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  "runArgs": ["--env-file", "${localWorkspaceFolder}/.env"],
+}
