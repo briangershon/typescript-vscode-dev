@@ -12,7 +12,7 @@ Use a VSCode dev container as your virtual TypeScript development environment fo
 ### Setup
 
 - **Important: You must create an `.env` file by copying `.env.example` to `.env` and filling in the values for the dev container to run**
-- add your Node packages to `package.json`
+- add your Node.js packages to `package.json`
 
 ### Open your project in VSCode
 
