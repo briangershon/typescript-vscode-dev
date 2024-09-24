@@ -1,7 +1,7 @@
 import "dotenv/config";
 
-import { BaseMessage, HumanMessage } from "@langchain/core/messages";
-import { END, StateGraph } from "@langchain/langgraph";
+import { BaseMessageLike } from "@langchain/core/messages";
+import { MessagesAnnotation, StateGraph } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
 
 export async function run() {
@@ -24,43 +24,20 @@ export async function run() {
     temperature: 0,
   });
 
-  // Define input and output types
-  interface GraphInput {
-    input: string;
+  const graphBuilder = new StateGraph(MessagesAnnotation);
+
+  async function callModel(state: typeof MessagesAnnotation.State) {
+    const response = await model.invoke(state.messages);
+    return { messages: [response] };
   }
 
-  interface GraphOutput {
-    output: string;
-  }
+  const app = graphBuilder
+    .addNode("agent", callModel)
+    .addEdge("__start__", "agent")
+    .compile();
 
-  // Create a simple workflow
-  const graph = new StateGraph<GraphInput, GraphOutput>({
-    channels: {
-      input: {},
-      output: {},
-    },
-  });
-
-  // Add a single node to the graph
-  graph.addNode("generate", async (input: GraphInput): Promise<GraphOutput> => {
-    const response: BaseMessage = await model.invoke([
-      new HumanMessage(input.input),
-    ]);
-    return { output: response.content };
-  });
-
-  // Set up the workflow
-  graph.setEntryPoint("generate");
-  graph.addEdge("generate", END);
-
-  // Run the workflow
-  async function main(): Promise<void> {
-    const executor = await graph.compile();
-    const result: GraphOutput = await executor.invoke({
-      input: "Hello, how are you?",
-    });
-    console.log(result.output);
-  }
-
-  main().catch((error: Error) => console.error(error));
+  const messages = Array<BaseMessageLike>();
+  messages.push({ content: "hello", role: "user" });
+  const output = await app.invoke({ messages });
+  console.log(output.messages.at(-1).content);
 }
