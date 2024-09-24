@@ -5,19 +5,10 @@ import { MessagesAnnotation, StateGraph } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
 
 export async function run() {
-  const myVar = process.env.EXAMPLE_VAR;
-  if (!myVar) {
-    throw new Error("EXAMPLE_VAR is not defined");
-  }
-
   const openAIApiKey = process.env.OPENAI_API_KEY;
   if (!openAIApiKey) {
     throw new Error("OPENAI_API_KEY is not defined");
   }
-
-  const world: string = "world";
-
-  console.log(`${myVar}, ${world}!`);
 
   const model = new ChatOpenAI({
     openAIApiKey,
@@ -38,6 +29,8 @@ export async function run() {
 
   const messages = Array<BaseMessageLike>();
   messages.push({ content: "hello", role: "user" });
+
+  console.log('Telling the model "hello"');
   const output = await app.invoke({ messages });
-  console.log(output.messages.at(-1).content);
+  console.log(`Model's reply is "${output.messages.at(-1).content}"`);
 }
